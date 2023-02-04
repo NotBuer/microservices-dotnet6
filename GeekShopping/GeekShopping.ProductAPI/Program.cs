@@ -6,8 +6,10 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var configuration = builder.Configuration;
 
-var connection = configuration["MySQLConnection:ConnectionString"];
+var connection = configuration["MySQLConnection:MySQlConnectionString"];
 services.AddDbContext<MySQLContext>(options => options.UseMySql(connection, new MySqlServerVersion(new Version(8, 0, 31))));
+
+services.AddControllers();
 
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 services.AddSingleton(mapper);
@@ -26,4 +28,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseHttpsRedirection();
+app.MapControllers();
 app.Run();
